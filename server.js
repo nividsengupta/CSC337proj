@@ -48,6 +48,16 @@ function checkAdmin(username){
     return false
 }
 
+function checkUser(username){
+    for (var i=0; i<userList.length; i++){
+        var user = userList[i]
+        if((user.username==username)&&(user.userType==user)){
+            return true
+        }
+    }
+    return false
+}
+
 app.get("/home", function(req,res){
     res.sendFile(path.join(rootFolder, 'home.html'))
 })
@@ -63,6 +73,9 @@ app.get('/source.js', function(req,res){
 app.post('/home', express.json(), function(req, res){
     if(checkAdmin(req.body.username)){
         res.sendFile(path.join(rootFolder, 'home_admin.html'))
+    }
+    else if(checkUser(req.body.username)){
+        res.sendFile(path.join(rootFolder, 'home_user.html'))
     }
     else{
         res.sendFile(path.join(rootFolder, 'home.html'))
@@ -93,10 +106,10 @@ app.post('/create_action', express.urlencoded({'extended':true}), function(req,r
     }catch(err){
         console.log(err)
     }
-    if(req.body.userType==admin && req.body.admincode=="1234"){
+    if(req.body.usertype==admin && req.body.admincode=="1234"){
         res.sendFile(path.join(rootFolder,"create_action.html"))
     }
-    else if(req.body.userType==user){
+    else if(req.body.usertype==user){
         res.sendFile(path.join(rootFolder,"create_action.html"))
     }
     else{
@@ -118,10 +131,103 @@ app.post('/lgn_action', express.urlencoded(), function(req,res){
 })
 
 app.post("/view", express.json(), function(req,res){
-    
+    res.sendFile(path.join(rootFolder, "view.html"))
+})
+
+app.post("/view_action",express.json(),function(req,res){
+    var posts=``
+    try{
+        var content = fs.readFileSync("post_data.json", {'encoding':"utf8"})
+        var parsedContent=JSON.parse(content)
+        var coursesArray = parsedContent["courses"]
+        var index = coursesArray.indexOf(req.body.course)
+        if(index==-1)res.sendFile(path.join(rootFolder, "view_failure.html"))
+        else{
+            var postsArray = parsedContent['posts']
+            var coursePosts = postsArray[index]
+            for (var i=0; i<coursePosts.length; i++){
+                post=coursePosts[i]
+                posts+=`<div>Post number${i+1}<br>${post}</div>`
+            }
+            res.send(`
+            <!DOCTYPE html><!-Remember to add header and navigation bar->
+<html>
+    <body>
+        <h1>Posts from course ${coursesArray[index]}</h1>
+        ${posts}
+    </body>
+</html>
+                `)
+        }
+        
+    }catch(err){
+        console.log(err)
+    }
+
+})
+
+app.post('/add', express.json(), function(req, res){
+    res.sendFile(path.join(rootFolder, 'add.html'))
+})
+
+app.post('/add_action', express.json(),function(req,res){
+    try{
+        var content =fs.readFileSync("post_data.json",{'encoding':"utf8"})
+        var parsedContent=JSON.parse(content)
+        var coursesArray=parsedContent["courses"]
+        var index=coursesArray.indexOf(req.body.course)
+        var postsArray = parsedContent["posts"]
+        if(index==-1){
+            coursesArray.push(req.body.username)
+            postsArray.push([req.body.review])
+        }
+        else{
+            postsArray[index].push(req.body.review)
+        }
+        try{
+            fs.writeFileSync("posts_data.json",JSON.stringify(parsedContent),{'encoding':"utf8"})
+        }catch(err){
+            console.log(err)
+        }
+    }catch(err){
+        console.log(err)
+    }
+    res.sendFile(path.join(rootFolder, 'add_action.html'))
+})
+
+app.post('/delete', express.json(), function(req, res){
+    res.sendFile(path.join(rootFolder, 'delete.html'))
+})
+
+app.post('/delete_action', express.json(),function(req,res){
+    try{
+        var content =fs.readFileSync("post_data.json",{'encoding':"utf8"})
+        var parsedContent=JSON.parse(content)
+        var coursesArray=parsedContent["courses"]
+        var index=coursesArray.indexOf(req.body.course)
+        var postsArray = parsedContent["posts"]
+        if(index==-1)res.sendFile('delete_action_failure.html')
+        else{
+            var postIndex =parseInt(req.body.postnumber)-1
+            var coursePosts = postsArray[index]
+            if(postIndex>=coursePosts.length || postIndex<0)res.sendFile('delete_action_failure.html')
+            else{
+                coursePosts.splice(postIndex,1)
+                try{
+                    fs.writeFileSync("posts_data.json",JSON.stringify(parsedContent),{'encoding':"utf8"})
+                }catch(err){
+                    console.log(err)
+                }
+            }  
+        }
+    }catch(err){
+        console.log(err)
+    }
+    res.sendFile(path.join(rootFolder, 'delete_action.html'))
 })
 
 app.post('/about', express.json(), function(req,res){
+
     res.sendFile(path.join(rootFolder, "about.html"))
 })
 
@@ -138,8 +244,8 @@ app.post('/cont_action', express.urlencoded(),function(req,res){
     emailArray.push(req.body.email)
     var phoneArray = parsedContent["phone"]
     phoneArray.push(req.body.phone)
-    var feedbackArray = parsedContent["feedback"]
-    feedbackArray.push(req.body.feedback)
+    var messageArray = parsedContent["message"]
+    messageArray.push(req.body.message)
     try{
         fs.writeFileSync("contact_data.json",JSON.stringify(parsedContent),{'encoding':"utf8"})
     }catch(err){

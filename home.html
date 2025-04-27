@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="source.js"></script>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <header>
+            <h1>UA Course Critique</h1>
+            <p>A simple website for user and course management</p>
+        </header>
+        <nav>
+            <a onclick="sendReq('/home')">Home</a>
+            <a onclick="sendReq('/create_user')">Create User</a>
+            <a onclick="sendReq('/login')">Login</a>
+            <a onclick="sendReq('/view')">View Courses</a>
+        </nav>
+        <div>
+            <h2>Welcome to UA Course Critique</h2>
+            <p>Find honest reviews of your courses before you enroll!</p>
+            <h3>Discover Courses</h3>
+            <p>Browse through hundreds of courses offered by different departments and see what students think about them.</p>
+            <h3>Write Reviews</h3>
+            <p>Share your own experiences to help future students make better choices.</p>
+            <h3>Rate Professors</h3>
+            <p>Give feedback to your professors and recognize the ones who made a difference!</p>
+            This is the homepage of the University system. It has two modules:
+            <ul>
+                <li>User</li>
+                <ul>
+                    <li>Create User</li>
+                    <li>Login/logout</li>
+                    <li>Sessions</li>
+                </ul>
+                <li>Course</li>
+                <ul>
+                    <li>Course management (admin only)</li>
+                    <li>Course enrollment (user only)</li>
+                    <li>View Courses</li>
+                </ul>
+                <li>Post</li>
+                <ul>
+                    <li>Post management (admin only)</li>
+                    <li>Post enrollment (user only)</li>
+                    <li>View Posts</li>
+                </ul>
+            </ul>
+        </div>
+        <footer>
+            <p>&copy; 2025 UACourseCritique. All rights reserved.</p>
+        </footer>
+    </body>
+</html>

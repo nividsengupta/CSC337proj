@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html> 
+    <head>
+        <script src="source.js"></script>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <header>
+            <h1>UA Course Critique</h1>
+            <p>A simple website for user and course management</p>
+        </header>
+        <nav>
+            <a onclick="sendReq('home')">Home</a>
+            <a onclick="sendReq('create_user')">Create user</a>
+            <a onclick="sendReq('login')">Login</a>
+        </nav>
+        <div>
+            <h2>Create a New Account</h2>
+            <p>Please fill out the form below to create a new user account. Choose whether you are a regular user or an admin.</p>
+            <form method="POST" action="create_action">
+                Username: <input type="text" name="username" id="username" placeholder="Enter your username"><br><br>
+                Password: <input type="password" name="password" id="password" placeholder="Enter your password"><br><br>
+                Admin Code: <input type="text" name="admincode" id="admincode" placeholder="Enter your Admin Code"><br><br>
+                User type: 
+                <input type="radio" name="usertype" value="user" id="user" checked> User
+                <input type="radio" name="usertype" value="admin" id="admin"> Admin<br><br>
+                <input type="submit" onclick="storeUser()">   
+            </form>
+        </div>
+        <footer>
+            <p>&copy; 2025 UACourseCritique. All rights reserved.</p>
+        </footer>
+    </body>
+</html>

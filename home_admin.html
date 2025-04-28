@@ -6,33 +6,49 @@
     </head>
     <body>
         <header>
-            <h1>The University Website</h1>
-            <p>A simple website for user and course management</p>
+            <h1>UA Course Critique</h1>
+            <p>The Course Review Website</p>
         </header>
         <nav>
             <a onclick="sendReq('home')">Home</a>
-            <a onclick="sendReq('create_user')">Create user</a>
-            <a onclick="sendReq('login')">Login</a>
-            <a onclick="sendReq('manage')">Manage courses</a>
-            <a onclick="sendReq('view')">View courses</a>
+            <a onclick="sendReq('/create_user')">Create User</a>
+            <a onclick="sendReq('/login')">Login</a>
+            <a onclick="sendReq('/view')">View Courses</a>
+            <a onclick="sendReq('/add')">Post Review</a>
+            <a onclick="sendReq('/delete')">Delete Review</a>
+            <a onclick="sendReq('/about')">About Us</a>
+            <a onclick="sendReq('/contact')">Contact Us</a>
         </nav>
-        <div>This is the homepage of the University system. It has two modules:
+        <div>
+            <h2>Welcome to UA Course Critique</h2>
+            <p>Find honest reviews of your courses before you enroll!</p>
+            <h3>Discover Courses</h3>
+            <p>Browse through hundreds of courses offered by different departments and see what students think about them.</p>
+            <h3>Write Reviews</h3>
+            <p>Share your own experiences to help future students make better choices.</p>
+            This is the admin homepage of the University of Arizona course critique. Find all the admin controls here. It has three modules:
             <ul>
-                <li>User</li><ul>
-                    <li>Create User</li>
-                    <li>Login/logout</li>
-                    <li>Sessions</li>
-                </ul>
-                <li>Course</li>
+                <li>User</li>
                 <ul>
-                    <li>Course management (admin only)</li>
-                    <li>Course enrollment (student only)</li>
-                    <li>View Course</li>
+                    <li>Create User</li>
+                    <li>Login</li>
+                    <li>User/Admin session</li>
+                </ul>
+                <li>Post</li>
+                <ul>
+                    <li>Manage Posts (admin only)</li>
+                    <li>Make Posts </li>
+                    <li>View Posts</li>
+                </ul>
+                <li>Contact</li>
+                <ul>
+                    <li>About us</li>
+                    <li>Feedback</li>
                 </ul>
             </ul>
         </div>
         <footer>
-            &copy; Copyright CSc 337
+            <p>&copy; 2025 UACourseCritique. All rights reserved.</p>
         </footer>
     </body>
 </html>

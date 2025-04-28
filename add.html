@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="source.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>UA Course Critique</h1>
+        <p>The Course Review Website</p>
+    </header>
+
+    <nav>
+        <a onclick="sendReq('/home')">Home</a>
+        <a onclick="sendReq('/view')">View Courses</a>
+        <a onclick="sendReq('/add')">Post Review</a>
+        <a onclick="sendReq('/about')">About Us</a>
+        <a onclick="sendReq('/contact')">Contact Us</a>
+    </nav>
+
+    <div>
+        <h2>Post a New Course Review</h2>
+        <form method="POST" action="post">
+            Course Name: <input type="text" name="course" id="course" placeholder="Enter course title..." required><br><br>
+            Review: <br>
+            <textarea name="review" id="review" rows="5" cols="50" placeholder="Write a review..." required></textarea><br><br>
+            <input type="submit" value="Post Review">
+        </form>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2025 UACourseCritique. All rights reserved.</p>
+    </footer>
+</body>
+</html>

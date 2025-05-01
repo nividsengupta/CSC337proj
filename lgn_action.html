@@ -7,12 +7,15 @@
             <body>
                 <header>
                     <h1>UA Course Critique</h1>
-                    <p>A simple website for user and course management</p>
+                    <p>The Course Review Website</p>
                 </header>
                 <nav>
                     <a onclick="sendReq('home')">Home</a>
-                    <a onclick="sendReq('create_user')">Create user</a>
-                    <a onclick="sendReq('login')">Login</a>
+                    <a onclick="sendReq('/view')">View Courses</a>
+                    <a onclick="sendReq('/add')">Post Review</a>
+                    <a onclick="sendReq('/about')">About Us</a>
+                    <a onclick="sendReq('/contact')">Contact Us</a>
+                    <a onclick="deleteUser()">Logout</a>
                 </nav>
                 <div>Welcome <script>document.write(window.localStorage.getItem('username'))</script>!</div>
                 <footer>

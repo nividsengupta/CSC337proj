@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="source.js"></script>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <header>
+            <h1>UA Course Critique</h1>
+            <p>The Course Review Website</p>
+        </header>
+        <nav>
+            <a onclick="sendReq('home')">Home</a>
+            <a onclick="sendReq('/create_user')">Create User</a>
+            <a onclick="sendReq('/login')">Login</a>
+            <a onclick="sendReq('/view')">View Courses</a>
+            <a onclick="sendReq('/add')">Post Review</a>
+            <a onclick="sendReq('/delete')">Delete Review</a>
+            <a onclick="sendReq('/message_solved')">Delete Query</a>
+            <a onclick="sendReq('/about')">About Us</a>
+            <a onclick="sendReq('/contact')">Contact Us</a>
+        </nav>
+        <div>
+            <h2>Delete solved queries</h2>
+            <p>Enter the username of query you solved to delete it</p>
+
+            <form method="POST" action="/msg_action">
+                Username: <input type="text" name="username" placeholder="Please provide username of the query you solved..." required><br><br>
+
+                <input type="submit" value="Delete">
+            </form>
+        </div>
+        <footer>
+            <p>&copy; 2025 UACourseCritique. All rights reserved.</p>
+        </footer>
+    </body>
+</html>

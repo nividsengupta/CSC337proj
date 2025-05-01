@@ -138,13 +138,12 @@ app.post("/view", express.json(), function(req,res){
     res.sendFile(path.join(rootFolder, "view.html"))
 })
 
-app.post("/vw_action",express.json(),function(req,res){
+app.post("/vw_action",express.urlencoded({extended: true}),function(req,res){
     var posts=``
     try{
         var content = fs.readFileSync("post_data.json", {'encoding':"utf8"})
         var parsedContent=JSON.parse(content)
         var coursesArray = parsedContent["courses"]
-        console.log(req.body.course)
         var index = coursesArray.indexOf(req.body.course)
         if(index==-1)res.sendFile(path.join(rootFolder, "view_failure.html"))
         else{
@@ -152,14 +151,32 @@ app.post("/vw_action",express.json(),function(req,res){
             var coursePosts = postsArray[index]
             for (var i=0; i<coursePosts.length; i++){
                 post=coursePosts[i]
-                posts+=`<div>Post number${i+1}<br>${post}</div>`
+                posts+=`<div class="post">Post number ${i+1}<br>${post}</div>`
             }
             res.send(`
-            <!DOCTYPE html><!-Remember to add header and navigation bar->
+            <!DOCTYPE html>
 <html>
+    <head>
+        <script src="source.js"></script>
+        <link rel="stylesheet" href="style.css">
+    </head>
     <body>
-        <h1>Posts from course ${coursesArray[index]}</h1>
+        <header>
+            <h1>UA Course Critique</h1>
+            <p>The Course Review Website</p>
+        </header>
+        <nav>
+            <a onclick="sendReq('/home')">Home</a>
+            <a onclick="sendReq('/view')">View Courses</a>
+            <a onclick="sendReq('/add')">Post Review</a>
+            <a onclick="sendReq('/about')">About Us</a>
+            <a onclick="sendReq('/contact')">Contact Us</a>
+            <a onclick="deleteUser()">Logout</a>
+        </nav>
+        <div>
+        <h2>Posts from course ${coursesArray[index]}</h2>
         ${posts}
+        </div>
     </body>
 </html>
                 `)
@@ -204,7 +221,7 @@ app.post('/delete', express.json(), function(req, res){
     res.sendFile(path.join(rootFolder, 'delete.html'))
 })
 
-app.post('/delete_action', express.json(),function(req,res){
+app.post('/delete_action', express.urlencoded({extended: true}),function(req,res){
     try{
         var content =fs.readFileSync("post_data.json",{'encoding':"utf8"})
         var parsedContent=JSON.parse(content)
@@ -213,9 +230,11 @@ app.post('/delete_action', express.json(),function(req,res){
         var postsArray = parsedContent["posts"]
         if(index==-1)res.sendFile(path.join(rootFolder, 'delete_action_failure.html'))
         else{
+            console.log(req.body.postnumber)
             var postIndex =parseInt(req.body.postnumber)-1
+            console.log(postIndex)
             var coursePosts = postsArray[index]
-            if(postIndex>=coursePosts.length || postIndex<0)res.sendFile('delete_action_failure.html')
+            if(postIndex>=coursePosts.length || postIndex<0)res.sendFile(path.join(rootFolder,'delete_action_failure.html'))
             else{
                 coursePosts.splice(postIndex,1)
                 try{

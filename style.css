@@ -33,6 +33,10 @@ a:hover{
     color:lightcoral;;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+.post{
+    background-color:lightblue;
+    margin: 10px;;
+}
 div{
     width:80%;
     margin:auto;

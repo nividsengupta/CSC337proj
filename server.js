@@ -255,6 +255,7 @@ app.post('/cont_action', express.urlencoded(),function(req,res){
 app.get('/message_solved', function(req,res){
     res.sendFile(path.join(rootFolder, 'message_solved.html'))
 })
+
 app.post('/msg_action', express.json(), function (req,res){
     var content =fs.readFileSync("contact_data.json",{'encoding':"utf8"})
     var parsedContent=JSON.parse(content)

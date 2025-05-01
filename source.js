@@ -2,6 +2,12 @@ function storeUser(){
     var username=document.getElementById('username').value
     window.localStorage.setItem("username", username)
 }
+
+function deleteUser(){
+    window.localStorage.setItem("username",null)
+    sendReq('/home')
+}
+
 function sendReq(url){
     var username =window.localStorage.getItem("username")
     var body = {}

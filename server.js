@@ -12,7 +12,7 @@ function loadUsers(){
         var parsedContent=JSON.parse(content)
         var usernameArray=parsedContent['username']
         var passwordArray = parsedContent['password']
-        var userTypeArray = parsedContent['userTypeArray']
+        var userTypeArray = parsedContent['userType']
         var result=[]
         for (var i=0;i<usernameArray.length;i++){
             var obj={'username':usernameArray[i], 'password':passwordArray[i], 'userType':userTypeArray[i]}
@@ -86,6 +86,10 @@ app.post('/create_user', express.json(), function(req,res){
     res.sendFile(path.join(rootFolder, "create_user.html"))
 })
 
+app.post('lg_out', express.json(), function(req,res){
+    res.sendFile(path.join(rootFolder, "log_out.html"))
+})
+
 app.post('/create_action', express.urlencoded({'extended':true}), function(req,res){
     var hashedPass=crypto.createHash('sha256').update(req.body.password).digest('hex')
     userList.push({'username':req.body.username, 'password':hashedPass, 'userType':req.body.usertype})
@@ -134,12 +138,13 @@ app.post("/view", express.json(), function(req,res){
     res.sendFile(path.join(rootFolder, "view.html"))
 })
 
-app.post("/view_action",express.json(),function(req,res){
+app.post("/vw_action",express.json(),function(req,res){
     var posts=``
     try{
         var content = fs.readFileSync("post_data.json", {'encoding':"utf8"})
         var parsedContent=JSON.parse(content)
         var coursesArray = parsedContent["courses"]
+        console.log(req.body.course)
         var index = coursesArray.indexOf(req.body.course)
         if(index==-1)res.sendFile(path.join(rootFolder, "view_failure.html"))
         else{
@@ -170,7 +175,7 @@ app.post('/add', express.json(), function(req, res){
     res.sendFile(path.join(rootFolder, 'add.html'))
 })
 
-app.post('/add_action', express.json(),function(req,res){
+app.post('/post', express.urlencoded({extended: true}),function(req,res){
     try{
         var content =fs.readFileSync("post_data.json",{'encoding':"utf8"})
         var parsedContent=JSON.parse(content)
@@ -178,14 +183,14 @@ app.post('/add_action', express.json(),function(req,res){
         var index=coursesArray.indexOf(req.body.course)
         var postsArray = parsedContent["posts"]
         if(index==-1){
-            coursesArray.push(req.body.username)
+            coursesArray.push(req.body.course)
             postsArray.push([req.body.review])
         }
         else{
             postsArray[index].push(req.body.review)
         }
         try{
-            fs.writeFileSync("posts_data.json",JSON.stringify(parsedContent),{'encoding':"utf8"})
+            fs.writeFileSync("post_data.json",JSON.stringify(parsedContent),{'encoding':"utf8"})
         }catch(err){
             console.log(err)
         }

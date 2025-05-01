@@ -92,28 +92,46 @@ app.post('lg_out', express.json(), function(req,res){
 
 app.post('/create_action', express.urlencoded({'extended':true}), function(req,res){
     var hashedPass=crypto.createHash('sha256').update(req.body.password).digest('hex')
-    userList.push({'username':req.body.username, 'password':hashedPass, 'userType':req.body.usertype})
-    try{
-        var content =fs.readFileSync("user_data.json",{'encoding':"utf8"})
-        var parsedContent=JSON.parse(content)
-        var usernameArray=parsedContent["username"]
-        usernameArray.push(req.body.username)
-        var passwordArray= parsedContent["password"]
-        passwordArray.push(hashedPass)
-        var userTypeArray=parsedContent["userType"]
-        userTypeArray.push(req.body.usertype)
+    if(req.body.usertype=="admin" && req.body.admincode=="1234"){
+        userList.push({'username':req.body.username, 'password':hashedPass, 'userType':req.body.usertype})
         try{
-            fs.writeFileSync("user_data.json",JSON.stringify(parsedContent),{'encoding':"utf8"})
+            var content =fs.readFileSync("user_data.json",{'encoding':"utf8"})
+            var parsedContent=JSON.parse(content)
+            var usernameArray=parsedContent["username"]
+            usernameArray.push(req.body.username)
+            var passwordArray= parsedContent["password"]
+            passwordArray.push(hashedPass)
+            var userTypeArray=parsedContent["userType"]
+            userTypeArray.push(req.body.usertype)
+            try{
+                fs.writeFileSync("user_data.json",JSON.stringify(parsedContent),{'encoding':"utf8"})
+            }catch(err){
+                console.log(err)
+            }
         }catch(err){
             console.log(err)
         }
-    }catch(err){
-        console.log(err)
-    }
-    if(req.body.usertype=="admin" && req.body.admincode=="1234"){
         res.sendFile(path.join(rootFolder,"create_action.html"))
     }
     else if(req.body.usertype=="user"){
+        userList.push({'username':req.body.username, 'password':hashedPass, 'userType':req.body.usertype})
+        try{
+            var content =fs.readFileSync("user_data.json",{'encoding':"utf8"})
+            var parsedContent=JSON.parse(content)
+            var usernameArray=parsedContent["username"]
+            usernameArray.push(req.body.username)
+            var passwordArray= parsedContent["password"]
+            passwordArray.push(hashedPass)
+            var userTypeArray=parsedContent["userType"]
+            userTypeArray.push(req.body.usertype)
+            try{
+                fs.writeFileSync("user_data.json",JSON.stringify(parsedContent),{'encoding':"utf8"})
+            }catch(err){
+                console.log(err)
+            }
+        }catch(err){
+            console.log(err)
+        }
         res.sendFile(path.join(rootFolder,"create_action.html"))
     }
     else{
@@ -298,6 +316,59 @@ app.post('/msg_action', express.urlencoded({extended: true}), function (req,res)
         }
         res.sendFile(path.join(rootFolder, 'message_action.html'))
     }  
+})
+
+app.post("/view_query",express.json(),function(req,res){
+    var posts=``
+    try{
+        var content = fs.readFileSync("contact_data.json", {'encoding':"utf8"})
+        var parsedContent=JSON.parse(content)
+        var usernameArray=parsedContent["username"]
+        var emailArray = parsedContent["email"]
+        var messageArray = parsedContent["message"]
+        for (var i=0; i<usernameArray.length; i++){
+            post=messageArray[i]
+            posts+=`<div class="post">Username ${usernameArray[i]}<br> Email ${emailArray[i]}<br>${post}</div>`
+        }
+            res.send(`
+            <!DOCTYPE html>
+<html>
+    <head>
+        <script src="source.js"></script>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <header>
+            <h1>UA Course Critique</h1>
+            <p>The Course Review Website</p>
+        </header>
+        <nav>
+            <a onclick="sendReq('home')">Home</a>
+            <a onclick="sendReq('/create_user')">Create User</a>
+            <a onclick="sendReq('/login')">Login</a>
+            <a onclick="sendReq('/view')">View Courses</a>
+            <a onclick="sendReq('/add')">Post Review</a>
+            <a onclick="sendReq('/delete')">Delete Review</a>
+            <a onclick="sendReq('/view_query')">View Query</a>
+            <a onclick="sendReq('/message_solved')">Delete Query</a>
+            <a onclick="sendReq('/about')">About Us</a>
+            <a onclick="sendReq('/contact')">Contact Us</a>
+            <a onclick="deleteUser()">Logout</a>
+        </nav>
+        <div>
+        <h2>Queries</h2>
+        ${posts}
+        </div>
+    </body>
+</html>
+                `)
+        
+
+        
+    }catch(err){
+        console.log(err)
+    }
+
 })
 
 app.listen(8080, function(){})

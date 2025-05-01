@@ -5,7 +5,7 @@ function storeUser(){
 
 function deleteUser(){
     window.localStorage.setItem("username",null)
-    sendReq('/login')
+    sendReq('/lg_out')
 }
 
 function sendReq(url){

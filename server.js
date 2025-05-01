@@ -86,6 +86,10 @@ app.post('/create_user', express.json(), function(req,res){
     res.sendFile(path.join(rootFolder, "create_user.html"))
 })
 
+app.post('lg_out', express.json(), function(req,res){
+    res.sendFile(path.join(rootFolder, "log_out.html"))
+})
+
 app.post('/create_action', express.urlencoded({'extended':true}), function(req,res){
     var hashedPass=crypto.createHash('sha256').update(req.body.password).digest('hex')
     userList.push({'username':req.body.username, 'password':hashedPass, 'userType':req.body.usertype})

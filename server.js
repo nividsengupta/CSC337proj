@@ -41,7 +41,7 @@ function checkLogin(username, password){
 function checkAdmin(username){
     for (var i=0; i<userList.length; i++){
         var user = userList[i]
-        if((user.username==username)&&(user.userType==admin)){
+        if((user.username==username)&&(user.userType=="admin")){
             return true
         }
     }
@@ -51,7 +51,7 @@ function checkAdmin(username){
 function checkUser(username){
     for (var i=0; i<userList.length; i++){
         var user = userList[i]
-        if((user.username==username)&&(user.userType==user)){
+        if((user.username==username)&&(user.userType=="user")){
             return true
         }
     }
@@ -106,10 +106,10 @@ app.post('/create_action', express.urlencoded({'extended':true}), function(req,r
     }catch(err){
         console.log(err)
     }
-    if(req.body.usertype==admin && req.body.admincode=="1234"){
+    if(req.body.usertype=="admin" && req.body.admincode=="1234"){
         res.sendFile(path.join(rootFolder,"create_action.html"))
     }
-    else if(req.body.usertype==user){
+    else if(req.body.usertype=="user"){
         res.sendFile(path.join(rootFolder,"create_action.html"))
     }
     else{
@@ -206,7 +206,7 @@ app.post('/delete_action', express.json(),function(req,res){
         var coursesArray=parsedContent["courses"]
         var index=coursesArray.indexOf(req.body.course)
         var postsArray = parsedContent["posts"]
-        if(index==-1)res.sendFile('delete_action_failure.html')
+        if(index==-1)res.sendFile(path.join(rootFolder, 'delete_action_failure.html'))
         else{
             var postIndex =parseInt(req.body.postnumber)-1
             var coursePosts = postsArray[index]
@@ -242,8 +242,6 @@ app.post('/cont_action', express.urlencoded(),function(req,res){
     usernameArray.push(req.body.username)
     var emailArray = parsedContent["email"]
     emailArray.push(req.body.email)
-    var phoneArray = parsedContent["phone"]
-    phoneArray.push(req.body.phone)
     var messageArray = parsedContent["message"]
     messageArray.push(req.body.message)
     try{
@@ -252,6 +250,30 @@ app.post('/cont_action', express.urlencoded(),function(req,res){
         console.log(err)
     }
     res.sendFile(path.join(rootFolder, "contact_action.html"))
+})
+
+app.get('/message_solved', function(req,res){
+    res.sendFile(path.join(rootFolder, 'message_solved.html'))
+})
+app.post('/msg_action', express.json(), function (req,res){
+    var content =fs.readFileSync("contact_data.json",{'encoding':"utf8"})
+    var parsedContent=JSON.parse(content)
+    var usernameArray=parsedContent["username"]
+    var index = usernameArray.indexOf(req.body.username)
+    if(index==-1)res.sendFile(path.join(rootFolder, 'message_action_failure.html'))
+    else{
+        usernameArray.splice(index,1)
+        var emailArray = parsedContent["email"]
+        emailArray.splice(index,1)
+        var messageArray = parsedContent["message"]
+        messageArray.splice(index,1)
+        try{
+            fs.writeFileSync("contact_data.json",JSON.stringify(parsedContent),{'encoding':"utf8"})
+        }catch(err){
+            console.log(err)
+        }
+        res.sendFile(path.join(rootFolder, 'message_action.html'))
+    }  
 })
 
 app.listen(8080, function(){})

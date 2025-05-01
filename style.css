@@ -30,6 +30,7 @@ a{
 a:hover{
     cursor:pointer;
     background-color:blue;
+    color:lightcoral;;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 div{

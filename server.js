@@ -230,15 +230,14 @@ app.post('/delete_action', express.urlencoded({extended: true}),function(req,res
         var postsArray = parsedContent["posts"]
         if(index==-1)res.sendFile(path.join(rootFolder, 'delete_action_failure.html'))
         else{
-            console.log(req.body.postnumber)
             var postIndex =parseInt(req.body.postnumber)-1
-            console.log(postIndex)
             var coursePosts = postsArray[index]
             if(postIndex>=coursePosts.length || postIndex<0)res.sendFile(path.join(rootFolder,'delete_action_failure.html'))
             else{
                 coursePosts.splice(postIndex,1)
+                if (coursePosts.length==0)coursesArray.splice(index,1)
                 try{
-                    fs.writeFileSync("posts_data.json",JSON.stringify(parsedContent),{'encoding':"utf8"})
+                    fs.writeFileSync("post_data.json",JSON.stringify(parsedContent),{'encoding':"utf8"})
                 }catch(err){
                     console.log(err)
                 }
@@ -276,11 +275,11 @@ app.post('/cont_action', express.urlencoded(),function(req,res){
     res.sendFile(path.join(rootFolder, "contact_action.html"))
 })
 
-app.get('/message_solved', function(req,res){
+app.post('/message_solved', express.json(), function(req,res){
     res.sendFile(path.join(rootFolder, 'message_solved.html'))
 })
 
-app.post('/msg_action', express.json(), function (req,res){
+app.post('/msg_action', express.urlencoded({extended: true}), function (req,res){
     var content =fs.readFileSync("contact_data.json",{'encoding':"utf8"})
     var parsedContent=JSON.parse(content)
     var usernameArray=parsedContent["username"]

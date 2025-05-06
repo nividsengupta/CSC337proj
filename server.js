@@ -86,7 +86,7 @@ app.post('/create_user', express.json(), function(req,res){
     res.sendFile(path.join(rootFolder, "create_user.html"))
 })
 
-app.post('lg_out', express.json(), function(req,res){
+app.post('/lg_out', express.json(), function(req,res){
     res.sendFile(path.join(rootFolder, "log_out.html"))
 })
 

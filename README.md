@@ -58,9 +58,10 @@ To send feedback to the admin team, use the contact us page.
 
 Certain admin controls are locked to users with an admin account. To create admin account, goto create user tab and create account as admin with admin code '1234'.
 Log in to admin accounts via Log in tab.
-Upon successful login, all admin controls should be visible from Home tab. Admin controls are : 
-Delete review - Deletes specified review
-View Feedback - Lets admin view a list of all feedback posted via contact us forms
-Delete Feedback - Lets admin to delete feedback once resolved.
+Upon successful login, all admin controls should be visible from Home tab. 
+* Admin controls are : 
+  * Delete review - Deletes specified review
+  * View Feedback - Lets admin view a list of all feedback posted via contact us forms
+  * Delete Feedback - Lets admin to delete feedback once resolved.
 
 

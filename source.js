@@ -8,6 +8,10 @@ function deleteUser(){
     sendReq('/login')
 }
 
+function incorrectEntry(){
+    window.localStorage.setItem("username",null)
+}
+
 function sendReq(url){
     var username =window.localStorage.getItem("username")
     var body = {}

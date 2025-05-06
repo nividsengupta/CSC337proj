@@ -1,6 +1,6 @@
 function storeUser(){
-    var username=document.getElementById('username').value
-    window.localStorage.setItem("username", username)
+    var username = document.getElementById('username').value
+    window.localStorage.setItem("username",username)
 }
 
 function deleteUser(){

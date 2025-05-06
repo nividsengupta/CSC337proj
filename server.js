@@ -58,6 +58,17 @@ function checkUser(username){
     return false
 }
 
+function usernameAvailable(username){
+    for (var i=0; i<userList.length;i++){
+        var user=userList[i]
+        if(user.username==username){
+            return false
+        }
+    }
+    return true
+}
+
+
 app.get("/home", function(req,res){
     res.sendFile(path.join(rootFolder, 'home.html'))
 })
@@ -92,6 +103,7 @@ app.post('/lg_out', express.json(), function(req,res){
 
 app.post('/create_action', express.urlencoded({'extended':true}), function(req,res){
     var hashedPass=crypto.createHash('sha256').update(req.body.password).digest('hex')
+    
     if(req.body.usertype=="admin" && req.body.admincode=="1234"){
         userList.push({'username':req.body.username, 'password':hashedPass, 'userType':req.body.usertype})
         try{

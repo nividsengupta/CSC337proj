@@ -103,52 +103,55 @@ app.post('/lg_out', express.json(), function(req,res){
 
 app.post('/create_action', express.urlencoded({'extended':true}), function(req,res){
     var hashedPass=crypto.createHash('sha256').update(req.body.password).digest('hex')
-    
-    if(req.body.usertype=="admin" && req.body.admincode=="1234"){
-        userList.push({'username':req.body.username, 'password':hashedPass, 'userType':req.body.usertype})
-        try{
-            var content =fs.readFileSync("user_data.json",{'encoding':"utf8"})
-            var parsedContent=JSON.parse(content)
-            var usernameArray=parsedContent["username"]
-            usernameArray.push(req.body.username)
-            var passwordArray= parsedContent["password"]
-            passwordArray.push(hashedPass)
-            var userTypeArray=parsedContent["userType"]
-            userTypeArray.push(req.body.usertype)
+    if(usernameAvailable(req.body.username)){
+        if(req.body.usertype=="admin" && req.body.admincode=="1234"){
+            userList.push({'username':req.body.username, 'password':hashedPass, 'userType':req.body.usertype})
             try{
-                fs.writeFileSync("user_data.json",JSON.stringify(parsedContent),{'encoding':"utf8"})
+                var content =fs.readFileSync("user_data.json",{'encoding':"utf8"})
+                var parsedContent=JSON.parse(content)
+                var usernameArray=parsedContent["username"]
+                usernameArray.push(req.body.username)
+                var passwordArray= parsedContent["password"]
+                passwordArray.push(hashedPass)
+                var userTypeArray=parsedContent["userType"]
+                userTypeArray.push(req.body.usertype)
+                try{
+                    fs.writeFileSync("user_data.json",JSON.stringify(parsedContent),{'encoding':"utf8"})
+                }catch(err){
+                    console.log(err)
+                }
             }catch(err){
                 console.log(err)
             }
-        }catch(err){
-            console.log(err)
+            res.sendFile(path.join(rootFolder,"create_action.html"))
         }
-        res.sendFile(path.join(rootFolder,"create_action.html"))
-    }
-    else if(req.body.usertype=="user"){
-        userList.push({'username':req.body.username, 'password':hashedPass, 'userType':req.body.usertype})
-        try{
-            var content =fs.readFileSync("user_data.json",{'encoding':"utf8"})
-            var parsedContent=JSON.parse(content)
-            var usernameArray=parsedContent["username"]
-            usernameArray.push(req.body.username)
-            var passwordArray= parsedContent["password"]
-            passwordArray.push(hashedPass)
-            var userTypeArray=parsedContent["userType"]
-            userTypeArray.push(req.body.usertype)
+        else if(req.body.usertype=="user"){
+            userList.push({'username':req.body.username, 'password':hashedPass, 'userType':req.body.usertype})
             try{
-                fs.writeFileSync("user_data.json",JSON.stringify(parsedContent),{'encoding':"utf8"})
+                var content =fs.readFileSync("user_data.json",{'encoding':"utf8"})
+                var parsedContent=JSON.parse(content)
+                var usernameArray=parsedContent["username"]
+                usernameArray.push(req.body.username)
+                var passwordArray= parsedContent["password"]
+                passwordArray.push(hashedPass)
+                var userTypeArray=parsedContent["userType"]
+                userTypeArray.push(req.body.usertype)
+                try{
+                    fs.writeFileSync("user_data.json",JSON.stringify(parsedContent),{'encoding':"utf8"})
+                }catch(err){
+                    console.log(err)
+                }
             }catch(err){
                 console.log(err)
             }
-        }catch(err){
-            console.log(err)
+            res.sendFile(path.join(rootFolder,"create_action.html"))
         }
-        res.sendFile(path.join(rootFolder,"create_action.html"))
+        else{
+            res.sendFile(path.join(rootFolder,"create_action_failure.html"))
+        } 
+    }else{
+    res.sendFile(path.join(rootFolder, "username_inuse.html"))
     }
-    else{
-        res.sendFile(path.join(rootFolder,"create_action_failure.html"))
-    } 
 })
 
 app.post('/login', express.json(), function(req,res){
